@@ -1,5 +1,8 @@
 /* 2017/5/23 */
 const fs = require('fs');
+const dateFormat = require('dateformat');
+
+const logDateFormat = 'yyyy-mm-dd HH:MM:ss';
 
 function readExistingFile(dataFilePath, callback) {
   var buffer = [];
@@ -21,7 +24,8 @@ function readExistingFile(dataFilePath, callback) {
  * @param defaultPath Default path. If file is not found, default path will be used.
  */
 exports.readFile = (callback, filePath, defaultPath) => {
-  console.log(`Read file "${filePath}".`);
+  var now = dateFormat(new Date(), logDateFormat);
+  console.log(`${now} Read file "${filePath}".`);
   if (fs.existsSync(filePath)) {
     readExistingFile(filePath, callback);
   } else if (defaultPath != null && fs.existsSync(defaultPath)) {
@@ -40,7 +44,8 @@ exports.readFile = (callback, filePath, defaultPath) => {
  * @param filePath Path of file to be written.
  */
 exports.writeFile = (content, filePath) => {
-  console.log(`Write file "${filePath}".`);
+  var now = dateFormat(new Date(), logDateFormat);
+  console.log(`${now} Write file "${filePath}".`);
   var fileWriteStream = fs.createWriteStream(filePath);
   fileWriteStream.end(content);
 };
