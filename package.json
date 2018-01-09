@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "finalhandler": "0.5.1",
+    "router": "1.1.4",
+    "dateformat": "2.0.0",
+    "xml2js": "0.4.17"
+  },
+
+  "description": "HTTP server for mock service and cache service.",
+  "license": "MIT",
+  "name": "mock-cache-httpserver",
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "scripts": {
+    "start": "node ./HttpServer.js"
+  },
+  "version": "1.0.0"
+}
