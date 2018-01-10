@@ -8,6 +8,10 @@ var bodyAsyncHandler = require('./Handler/RequestBodyAsyncHandler');
 var urlSyncHandler = require('./Handler/RequestUrlSyncHandler');
 var urlAsyncHandler = require('./Handler/RequestUrlAsyncHandler');
 
+var sampleUrlJson = require('./JsonService/SampleUrlJsonService')
+var sampleBodyJson = require('./JsonService/SampleBodyJsonService');
+var sampleSoap = require('./SoapService/SampleSoapService');
+
 const port = 9010;
 const contentType = 'Content-Type';
 const plainTextUtf8 = 'text/plain; charset=utf-8';
@@ -22,13 +26,19 @@ router.get('/', function(request, response) {
   });
 });
 
+router.get('/json', function(request, response) {
+  response.setHeader(contentType, jsonUtf8);
+  urlAsyncHandler(request, response, sampleUrlJson);
+});
+
 router.post('/json', function(request, response) {
   response.setHeader(contentType, jsonUtf8);
-  bodyAsyncHandler(request, response, (requestBody, responseCallback) => {
-    var requestJson = JSON.parse(requestBody);
-    var responseJson = requestJson;
-    responseCallback(JSON.stringify(responseJson));
-  });
+  bodyAsyncHandler(request, response, sampleBodyJson);
+});
+
+router.post('/soap', function(request, response) {
+  response.setHeader(contentType, xmlUtf8);
+  bodyAsyncHandler(request, response, sampleSoap);
 });
 
 http.createServer(function(request, response) {
