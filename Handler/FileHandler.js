@@ -20,9 +20,9 @@ function readExistingFile(dataFilePath, callback) {
 /**
  * Reads a file and passes content to callback.
  * 
- * @param callback Callback to handle file content.
- * @param filePath Path of file to be read.
- * @param defaultPath Default path. If file is not found, default path will be used.
+ * @param {Function} callback Callback to handle file content.
+ * @param {string} filePath Path of file to be read.
+ * @param {string} defaultPath Default path. If file is not found, default path will be used.
  */
 exports.readFile = (callback, filePath, defaultPath) => {
   var now = dateFormat(new Date(), logDateFormat);
@@ -42,10 +42,10 @@ exports.readFile = (callback, filePath, defaultPath) => {
 /**
  * Writes content to a file.
  * 
- * @param content Content to be written to file.
- * @param filePath Path of file to be written.
+ * @param {string} content Content to be written to file.
+ * @param {string} filePath Path of file to be written.
  */
-exports.writeFile = (content, filePath) => {
+exports.writeFile = (content, filePath) => {  
   var now = dateFormat(new Date(), logDateFormat);
   console.log(`${now} Write file "${filePath}".`);
 
