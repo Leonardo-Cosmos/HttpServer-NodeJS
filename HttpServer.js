@@ -57,7 +57,7 @@ router.get('/sample/json/url', function(request, response) {
 let sampleSoapService = new SampleSoapService();
 router.post('/sample/soap', function(request, response) {
   response.setHeader(contentType, xmlUtf8);
-  dataAsyncHandler(request, response, sampleSoapService);
+  httpHandler.handleReqDataResAsync(request, response, sampleSoapService);
 });
 
 http.createServer(function(request, response) {
