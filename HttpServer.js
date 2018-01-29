@@ -2,6 +2,7 @@
 const finalhandler = require('finalhandler');
 const http = require('http');
 const https = require('https');
+const fs = require('fs');
 const Router = require('router');
 
 const httpHandler = require('./Handler/HttpHandler');
@@ -60,13 +61,21 @@ router.post('/sample/soap', function(request, response) {
   httpHandler.handleReqDataResAsync(request, response, sampleSoapService);
 });
 
+// Create HTTP server.
 http.createServer(function(request, response) {
   router(request, response, finalhandler(request, response));
 }).listen(httpPort);
 
-https.createServer(function(request, response) {
+console.log(`HTTP server is running on http://127.0.0.1:${httpPort}/`);
+
+// Create HTTPS server.
+const options = {
+  key: fs.readFileSync('Keys/server.key'),
+  cert: fs.readFileSync('Keys/server.crt')
+}
+
+https.createServer(options, function(request, response) {
   router(request, response, finalhandler(request, response));
 }).listen(httpsPort);
 
-console.log(`HTTP server is running on http://127.0.0.1:${httpPort}/`);
 console.log(`HTTPS server is running on https://127.0.0.1:${httpsPort}/`);
