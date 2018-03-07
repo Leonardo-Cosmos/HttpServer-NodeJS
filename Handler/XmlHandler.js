@@ -1,13 +1,35 @@
 /* 2017/5/24 */
 const xml2js = require('xml2js');
 
-var logElement = false;
+exports._enableLogSummary = false;
+exports._enableLogDetail = false;
 
 /**
- * Sets a value indicating whether print element detail or not.
+ * Sets a value indicating whether print summary in console.
+ * @param {boolean} value 
  */
-exports.setLogElement = (value) => {
-  logElement = value;
+exports.setLogSummary = function(value) {
+  this._enableLogSummary = value;
+}
+
+/**
+ * Sets a value indicating whether print element detail in console.
+ * @param {boolean} value
+ */
+exports.setLogDetail = (value) => {
+  this._enableLogDetail = value;
+}
+
+exports._logSummary = (message) => {
+  if (this._enableLogSummary) {
+    console.log(message);
+  }
+}
+
+exports._logDetail = (element) => {
+  if (this._enableLogDetail) {
+    console.dir(element);
+  }
 }
 
 /**
@@ -28,38 +50,42 @@ exports.parseString = (xml, jsonCallback) => {
  * Extracts sub element with specified key from an element.
  */
 exports.extractSubElement = (element, subKey) => {
-  console.log(`Extract "${subKey}".`);
-  if (logElement) {
-    console.dir(element);
-  }
+  
+  this._logSummary(`Extract "${subKey}".`);
+  this._logDetail(element);  
 
-  var subELement = element[subKey];
+  var subElement = element[subKey];
   if (typeof subElement === 'undefined') {
+    subElement = null;
+
     // Search sub element in all namespace.
     subKeys = Object.keys(element);
     for (i = 0; i < subKeys.length; i++) {
       if (subKeys[i].endsWith(':' + subKey)) {
-        subELement = element[subKeys[i]];
+        subElement = element[subKeys[i]];
         break;
       }
     }
   }
 
-  console.log(`Found ${subKey}`);
-  if (logElement) {
-    console.dir(subELement);
-  }
-  return subELement;
+  if (subElement != null) {
+    this._logSummary(`Found ${subKey}`);
+    this._logDetail(subElement);
+  }  
+
+  return subElement;
 };
 
 /**
  * Extracts sub element with specified key from first element of array.
  */
 exports.extractFirstSubElement = (elements, subKey) => {
-  console.log(`Extract first "${subKey}".`);
-  if (logElement) {
-    console.dir(elements);
+  if (typeof elements === 'undefined' || elements == null) {
+    return null;
   }
+
+  this._logSummary(`Extract first "${subKey}".`);
+  this._logDetail(elements);
 
   var subELement = this.extractSubElement(elements[0], subKey);
   return subELement;
