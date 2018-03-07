@@ -6,13 +6,25 @@ const xmlHandler = require('../Handler/XmlHandler');
 /**
  * Get SOAP action from HTTP request headers.
  * 
- * @param {*} requestData 
+ * @param {*} requestHeaders 
  * @returns {string} SOAP action.
  */
-function getActionFromHeaders(requestData) {
-  let requestHeaders = requestData.headers;
+function getActionFromHttpHeaders(requestHeaders) {
   let action = requestHeaders.soapaction;
   return action;
+}
+
+/**
+ * Get SOAP action from envelope headers of XML request (converted to JSON).
+ * 
+ * @param {*} requestJson 
+ * @returns {string} SOAP action.
+ */
+function getActionFromEnvelopeHeaders(requestJson) {
+  let envelop = xmlHandler.extractSubElement(requestJson, 'Envelope');
+  let header = xmlHandler.extractSubElement(envelop, 'Header');
+  let action = xmlHandler.extractFirstSubElement(header, 'Action');
+  return xmlHandler.extractFirstSubElement(action, '_');
 }
 
 function resolve(requestData, responseCallback) {
@@ -21,10 +33,22 @@ function resolve(requestData, responseCallback) {
   }
 
   const service = this;
+  const requestHeaders = requestData.headers;
   const requestBody = requestData.body;
 
   xmlHandler.parseString(requestBody, (requestJson) => {
-    const operation = service.getOperation(requestData);
+
+    let operationName;
+    switch (service.actionType) {
+      case 'HTTP':
+        operationName = getActionFromHttpHeaders(requestHeaders);
+        break;
+      case 'Envelope':
+        operationName = getActionFromEnvelopeHeaders(requestJson);
+        break;
+    }
+
+    let operation = service.getOperation(operationName);
 
     if (operation == null) {
       console.error(`Web service operation is not found.`);
@@ -47,7 +71,7 @@ function resolve(requestData, responseCallback) {
 }
 
 function SoapService() {
-  this.getActionFromHeaders = getActionFromHeaders;
+  this.getActionFromHttpHeaders = getActionFromHttpHeaders;
   this.resolve = resolve;
 }
 

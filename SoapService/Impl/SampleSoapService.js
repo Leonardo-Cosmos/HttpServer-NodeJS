@@ -38,8 +38,7 @@ const operationInfos = [
   }
 ]
 
-function getOperation(requestData) {
-  let operationName = this.getActionFromHeaders(requestData);
+function getOperation(operationName) {
   for (let key in operationInfos) {
     let operationInfo = operationInfos[key];
     if (operationInfo.name == operationName) {
@@ -51,6 +50,7 @@ function getOperation(requestData) {
 function SampleSoapSerivce() {
   SoapService.call(this);
 
+  this.actionType = 'HTTP';
   this.getOperation = getOperation;
 }
 util.inherits(SampleSoapSerivce, SoapService);
