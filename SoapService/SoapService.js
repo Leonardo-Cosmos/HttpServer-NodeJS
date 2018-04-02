@@ -59,7 +59,7 @@ function resolve(requestData, responseCallback) {
     let key = operation.getKey(requestJson);
     let logFilePath = operation.getLogPath(key);
     let mockFilePath = operation.getMockPath(key);
-    let mockDefaultFilePath = operation.getMockPath(operation.defaultKey);
+    let mockDefaultFilePath = operation.getMockPath(operation.config.defaultKey);
 
     if (logFilePath != null) {
       fileHandler.writeFile(requestBody, logFilePath);
