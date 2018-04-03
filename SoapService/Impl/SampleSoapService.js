@@ -33,7 +33,7 @@ const sampleOperation = {
 
 const operationInfos = [
   {
-    name: "\"http://www.sample.org/services/SampleSoapSerivce/Sample\"",
+    name: "http://www.sample.org/services/SampleSoapSerivce/Sample",
     operation: sampleOperation
   }
 ]
@@ -41,7 +41,8 @@ const operationInfos = [
 function getOperation(operationName) {
   for (let key in operationInfos) {
     let operationInfo = operationInfos[key];
-    if (operationInfo.name == operationName) {
+    if (operationInfo.name == operationName ||
+      `"${operationInfo.name}"` == operationName) {
       return operationInfo.operation;
     }
   }
