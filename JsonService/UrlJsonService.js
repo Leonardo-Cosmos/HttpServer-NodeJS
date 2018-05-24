@@ -9,7 +9,6 @@ function resolve(requestUrl, responseCallback) {
     responseCallback(null);
   }
   let requestQuery = url.parse(requestUrl, true).query;
-  //console.log(requestQuery);
   let key = this.getKey(requestQuery);
   let logFilePath = this.getLogPath(key);
   let mockFilePath = this.getMockPath(key);

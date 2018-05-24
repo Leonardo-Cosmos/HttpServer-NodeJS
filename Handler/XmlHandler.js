@@ -1,5 +1,8 @@
 /* 2017/5/24 */
 const xml2js = require('xml2js');
+const log4js = require('log4js');
+
+const logger = log4js.getLogger('xmlHandler');
 
 exports._enableLogSummary = false;
 exports._enableLogDetail = false;
@@ -22,13 +25,13 @@ exports.setLogDetail = (value) => {
 
 exports._logSummary = (message) => {
   if (this._enableLogSummary) {
-    console.log(message);
+    logger.debug(message);
   }
 }
 
 exports._logDetail = (element) => {
   if (this._enableLogDetail) {
-    console.dir(element);
+    logger.debug(element);
   }
 }
 
@@ -59,8 +62,8 @@ exports.extractSubElement = (element, subKey) => {
     subElement = null;
 
     // Search sub element in all namespace.
-    subKeys = Object.keys(element);
-    for (i = 0; i < subKeys.length; i++) {
+    var subKeys = Object.keys(element);
+    for (var i = 0; i < subKeys.length; i++) {
       if (subKeys[i].endsWith(':' + subKey)) {
         subElement = element[subKeys[i]];
         break;

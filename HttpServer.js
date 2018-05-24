@@ -5,7 +5,15 @@ const https = require('https');
 const fs = require('fs');
 const Router = require('router');
 
+const log4js = require('log4js');
+log4js.configure({
+  appenders: { console: { type: 'stdout'} },
+  categories: { default: { appenders: ['console'], level: 'debug' } }
+});
+
 const httpHandler = require('./Handler/HttpHandler');
+
+const logger = log4js.getLogger('HttpServer');
 
 const SampleConstJsonService = require('./JsonService/Impl/SampleConstJsonService');
 const SampleBodyJsonService = require('./JsonService/Impl/SampleBodyJsonService');
@@ -66,7 +74,7 @@ http.createServer(function(request, response) {
   router(request, response, finalhandler(request, response));
 }).listen(httpPort);
 
-console.log(`HTTP server is running on http://127.0.0.1:${httpPort}/`);
+logger.info(`HTTP server is running on http://127.0.0.1:${httpPort}/`);
 
 // Create HTTPS server.
 const options = {
@@ -78,4 +86,4 @@ https.createServer(options, function(request, response) {
   router(request, response, finalhandler(request, response));
 }).listen(httpsPort);
 
-console.log(`HTTPS server is running on https://127.0.0.1:${httpsPort}/`);
+logger.info(`HTTPS server is running on https://127.0.0.1:${httpsPort}/`);

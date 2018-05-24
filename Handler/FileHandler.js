@@ -1,9 +1,9 @@
 /* 2017/5/23 */
 const fs = require('fs');
 const path = require('path');
-const dateFormat = require('dateformat');
+const log4js = require('log4js');
 
-const logDateFormat = 'yyyy-mm-dd HH:MM:ss';
+const logger = log4js.getLogger('fileHandler');
 
 function readExistingFile(dataFilePath, callback) {
   var buffer = [];
@@ -25,13 +25,12 @@ function readExistingFile(dataFilePath, callback) {
  * @param {string} defaultPath Default path. If file is not found, default path will be used.
  */
 exports.readFile = (callback, filePath, defaultPath) => {
-  var now = dateFormat(new Date(), logDateFormat);
-  console.log(`${now} Read file "${filePath}".`);
+  logger.info(`Read file "${filePath}".`);
 
   if (fs.existsSync(filePath)) {
     readExistingFile(filePath, callback);
   } else if (defaultPath != null && fs.existsSync(defaultPath)) {
-    console.log(`Use default file "${defaultPath}".`);
+    logger.info(`Use default file "${defaultPath}".`);
     readExistingFile(defaultPath, callback);
   } else {
     console.error(`File is not found.`);
@@ -45,9 +44,8 @@ exports.readFile = (callback, filePath, defaultPath) => {
  * @param {string} content Content to be written to file.
  * @param {string} filePath Path of file to be written.
  */
-exports.writeFile = (content, filePath) => {  
-  var now = dateFormat(new Date(), logDateFormat);
-  console.log(`${now} Write file "${filePath}".`);
+exports.writeFile = (content, filePath) => {
+  logger.info(`Write file "${filePath}".`);
 
   var dirPath = path.dirname(filePath);
   if (!fs.existsSync(dirPath)) {
