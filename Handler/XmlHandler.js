@@ -41,7 +41,7 @@ exports._logDetail = (element) => {
 exports.parseString = (xml, jsonCallback) => {
   xml2js.parseString(xml, function(err, js) {
     if (err != null) {
-      console.error(err);
+      logger.error(err);
       return;
     }
 
@@ -51,6 +51,10 @@ exports.parseString = (xml, jsonCallback) => {
 
 /**
  * Extracts sub element with specified key from an element.
+ * 
+ * @param element Element of start level.
+ * @param {string} subKey Key of sub-level.
+ * @returns Element of sub-level or text of element.
  */
 exports.extractSubElement = (element, subKey) => {
   
@@ -80,7 +84,11 @@ exports.extractSubElement = (element, subKey) => {
 };
 
 /**
- * Extracts sub element with specified key from first element of array.
+ * Extracts sub element with specified key from first element.
+ * 
+ * @param {array} elements Elements of start level.
+ * @param {string} subKey Key of sub-level.
+ * @returns Elements of sub-level or text of element.
  */
 exports.extractFirstSubElement = (elements, subKey) => {
   if (typeof elements === 'undefined' || elements == null) {
@@ -90,6 +98,34 @@ exports.extractFirstSubElement = (elements, subKey) => {
   this._logSummary(`Extract first "${subKey}".`);
   this._logDetail(elements);
 
-  var subELement = this.extractSubElement(elements[0], subKey);
-  return subELement;
+  var subElement = this.extractSubElement(elements[0], subKey);
+  return subElement;
+};
+
+/**
+ * Extracts sub element recursively with specified keys from first element of every level.
+ * 
+ * @param {array} elements Elements of start level.
+ * @param {array} subKeys Array of key of every sub-level.
+ * @returns Final element of sub-level or text of element.
+ */
+exports.extractFirstSubElementRecursive = (elements, subKeys) => {
+  if (typeof elements === 'undefined' || elements == null) {
+    return null;
+  }
+
+  if (subKeys === 'undefined' || subKeys == null) {
+    return elements[0];
+  }
+
+  let currentElement = elements;
+  for (let subKey in subKeys) {
+    if (currentElement == null) {
+      return null;
+    }
+    
+    currentElement = this.extractFirstSubElement(currentElement, subKeys[subKey]);
+  }
+
+  return currentElement;
 };
