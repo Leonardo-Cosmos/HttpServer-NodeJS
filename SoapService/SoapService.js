@@ -2,6 +2,9 @@
 const dateFormat = require('dateformat');
 const fileHandler = require('../Handler/FileHandler');
 const xmlHandler = require('../Handler/XmlHandler');
+const log4js = require('log4js');
+
+const logger = log4js.getLogger('soapService');
 
 /**
  * Get SOAP action from HTTP request headers.
@@ -51,12 +54,18 @@ function resolve(requestData, responseCallback) {
     let operation = service.getOperation(operationName);
 
     if (operation == null) {
-      console.error(`Web service operation is not found.`);
+      logger.error(`Web service operation ${operationName} is not found.`);
       responseCallback('');
       return;
     }
 
-    let key = operation.getKey(requestJson);
+    let key = null;
+    try {
+      key = operation.getKey(requestJson);
+    } catch (err) {
+      logger.error(err);
+      return;
+    }
     let logFilePath = operation.getLogPath(key);
     let mockFilePath = operation.getMockPath(key);
     let mockDefaultFilePath = operation.getMockPath(operation.config.defaultKey);

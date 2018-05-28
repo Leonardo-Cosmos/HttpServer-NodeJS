@@ -1,8 +1,11 @@
 /* 2017/12/25 */
+const log4js = require('log4js');
+
+const logger = log4js.getLogger('httpHandler');
 
 exports.handleReqConstResSync = (request, response, syncService) => {
   response.on('error', function(err) {
-    console.error(err);
+    logger.error(err);
   });
 
   var responseBody = syncService.resolve();
@@ -17,7 +20,7 @@ exports.handleReqConstResSync = (request, response, syncService) => {
 
 exports.handleReqConstResAsync = (request, response, asyncService) => {
   response.on('error', function(err) {
-    console.error(err);
+    logger.error(err);
   });
 
   asyncService.resolve(function(responseBody) {
@@ -34,7 +37,7 @@ exports.handleReqConstResAsync = (request, response, asyncService) => {
 
 exports.handleReqUrlResSync = (request, response, syncService) => {
   response.on('error', function(err) {
-    console.error(err);
+    logger.error(err);
   });
 
   var requestUrl = request.url;
@@ -50,7 +53,7 @@ exports.handleReqUrlResSync = (request, response, syncService) => {
 
 exports.handleReqUrlResAsync = (request, response, asyncService) => {
   response.on('error', function(err) {
-    console.error(err);
+    logger.error(err);
   });
   
   var requestUrl = request.url;
@@ -69,14 +72,14 @@ exports.handleReqUrlResAsync = (request, response, asyncService) => {
 exports.handleReqBodyResSync = (request, response, syncService) => {
   var requestBody = [];
   request.on('error', function(err) {
-    console.error(err);
+    logger.error(err);
   }).on('data', function(chunk) {
     requestBody.push(chunk);
   }).on('end', function() {
     requestBody = Buffer.concat(requestBody).toString();
 
     response.on('error', function(err) {
-      console.error(err);
+      logger.error(err);
     });
 
     var responseBody = syncService.resolve(requestBody);
@@ -93,14 +96,14 @@ exports.handleReqBodyResSync = (request, response, syncService) => {
 exports.handleReqBodyResAsync = (request, response, asyncService) => {
   var requestBody = [];
   request.on('error', function(err) {
-    console.error(err);
+    logger.error(err);
   }).on('data', function(chunk) {
     requestBody.push(chunk);
   }).on('end', function() {
     requestBody = Buffer.concat(requestBody).toString();
 
     response.on('error', function(err) {
-      console.error(err);
+      logger.error(err);
     });
 
     asyncService.resolve(requestBody, function(responseBody) {
@@ -121,7 +124,7 @@ exports.handleReqDataResSync = (request, response, syncService) => {
   var requestHeaders = request.headers;
   var requestBody = [];
   request.on('error', function(err) {
-    console.error(err);
+    logger.error(err);
   }).on('data', function(chunk) {
     requestBody.push(chunk);
   }).on('end', function() {
@@ -134,7 +137,7 @@ exports.handleReqDataResSync = (request, response, syncService) => {
     };
 
     response.on('error', function(err) {
-      console.error(err);
+      logger.error(err);
     });
 
     var responseBody = syncService.resolve(requestData);
@@ -153,7 +156,7 @@ exports.handleReqDataResAsync = (request, response, asyncService) => {
   var requestHeaders = request.headers;
   var requestBody = [];
   request.on('error', function(err) {
-    console.error(err);
+    logger.error(err);
   }).on('data', function(chunk) {
     requestBody.push(chunk);
   }).on('end', function() {
@@ -166,7 +169,7 @@ exports.handleReqDataResAsync = (request, response, asyncService) => {
     };
 
     response.on('error', function(err) {
-      console.error(err);
+      logger.error(err);
     });
 
     asyncService.resolve(requestData, function(responseBody) {

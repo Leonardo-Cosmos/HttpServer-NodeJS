@@ -33,7 +33,7 @@ exports.readFile = (callback, filePath, defaultPath) => {
     logger.info(`Use default file "${defaultPath}".`);
     readExistingFile(defaultPath, callback);
   } else {
-    console.error(`File is not found.`);
+    logger.warn(`File ${filePath} is not found.`);
     callback(null);
   }
 };
