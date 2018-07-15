@@ -7,9 +7,9 @@
     "log4js": "2.5.3"
   },
 
-  "description": "HTTP server for mock service and cache service.",
+  "description": "HTTP server for mock service and proxy service.",
   "license": "MIT",
-  "name": "mock-cache-httpserver",
+  "name": "mock-proxy-httpserver",
   "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
